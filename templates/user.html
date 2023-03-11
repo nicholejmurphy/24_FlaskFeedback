@@ -1,0 +1,60 @@
+{% extends 'base.html' %} {% block title %}{{user.username}}{% endblock %} {%
+block header %}User Details{% endblock %} {% block main %}
+<div class="card d-flex justify-content-center" style="width: 30rem">
+  <div class="card-body">
+    <h5 class="card-title">
+      {{user.first_name}} {{user.last_name}} {% if user.username ==
+      session['user_id'] %}
+      <form class="d-inline">
+        <button
+          formaction="/users/{{user.username}}/delete"
+          formmethod="post"
+          class="btn btn-sm btn-outline-danger px-1"
+        >
+          Delete
+        </button>
+      </form>
+      {% endif %}
+    </h5>
+    <h6 class="card-subtitle mb-2 text-muted">
+      {{user.username}}<span class="text-primary"> - {{user.email}}</span>
+    </h6>
+
+    <hr />
+
+    <h2>User's Feedback:</h2>
+
+    {% for fb in feedback %}
+    <div class="card m-3" style="width: 25rem">
+      <div class="card-body">
+        <h5 class="card-title">{{fb.title}}</h5>
+        <h6 class="card-subtitle mb-2 text-info">{{fb.username}}</h6>
+        <p class="card-text">{{fb.content}}</p>
+        {% if user.username == session['user_id'] %}
+        <form>
+          <button
+            formaction="/feedback/{{fb.id}}/delete"
+            formmethod="post"
+            class="btn btn-sm btn-danger"
+          >
+            Delete
+          </button>
+          <button
+            formaction="/feedback/{{fb.id}}/update"
+            formmethod="post"
+            class="btn btn-sm btn-info"
+          >
+            Update
+          </button>
+        </form>
+        {% endif %}
+      </div>
+    </div>
+    {% endfor %}{% if user.username == session['user_id'] %}<a
+      href="/users/{{session['user_id']}}/feedback/add"
+      class="btn btn-sm btn-primary"
+      >Add Feedback</a
+    >{% endif %}
+  </div>
+</div>
+{% endblock %}
